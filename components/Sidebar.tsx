@@ -6,12 +6,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
+// START WORK FROM HERE SIDEBAR COMPONENT
 const Sidebar = ({ user }: SidebarProps) => {
   const pathname = usePathname();
   return (
     <section className="sidebar">
       <nav className="flex flex-col gap-4">
-        <Link href="/" className="mb-12 cursor-pointer items-center gap-2">
+        <Link href="/" className="mb-12 cursor-pointer flex items-center gap-2">
           <Image
             src="/icons/logo.svg"
             width={34}
@@ -23,7 +24,7 @@ const Sidebar = ({ user }: SidebarProps) => {
         </Link>
         {sidebarLinks.map((item) => {
           const isActive =
-            pathname === item.route || pathname.startsWith(`${item.route}`);
+            pathname === item.route;
           return (
             <Link
               key={item.label}
@@ -52,7 +53,9 @@ const Sidebar = ({ user }: SidebarProps) => {
             </Link>
           );
         })}
+        USER
       </nav>
+      FOOTER
     </section>
   );
 };
