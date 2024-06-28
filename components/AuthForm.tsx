@@ -21,15 +21,18 @@ import { Input } from "@/components/ui/input";
 import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const AuthForm = ({ type }: { type: string }) => {
-    // https://www.youtube.com/watch?v=PuOVqP_cjkE&t=6087s 2:15:15
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const formSchema = authFormSchema(type);
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof authFormSchema>>({
-    resolver: zodResolver(authFormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -37,13 +40,31 @@ const AuthForm = ({ type }: { type: string }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof authFormSchema>) {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    try {
+      // Sign up with AppWrite and Create Plaid Token
+      if (type === "sign-up") {
+        // const newUser = await signUp(data);
+        // setUser(newUser)
+      }
+
+      if (type === "sign-in") {
+        // const response = await signIn({
+        //   email: data.email,
+        //   password: data.password,
+        // });
+        // if (response) router.push("/");
+      }
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    setIsLoading(true);
-    console.log(values);
+    console.log(data);
     setIsLoading(false);
-  }
+  };
 
   return (
     <section className="auth-form">
@@ -71,20 +92,99 @@ const AuthForm = ({ type }: { type: string }) => {
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <CustomInput
-                control={form.control}
-                name="email"
-                type="email"
-                placeholder="Enter your email address"
-                label="Email"
-              />
-              <CustomInput
-                control={form.control}
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                label="Password"
-              />
+              {type === "sign-in" ? (
+                <>
+                  <CustomInput
+                    control={form.control}
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email address"
+                    label="Email"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    label="Password"
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-4">
+                    <CustomInput
+                      control={form.control}
+                      name="firstName"
+                      type="text"
+                      placeholder="Ex: Vishal"
+                      label="First Name"
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="lastName"
+                      type="text"
+                      placeholder="Ex: Gangde"
+                      label="Last Name"
+                    />
+                  </div>
+
+                  <CustomInput
+                    control={form.control}
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email address"
+                    label="Email"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    label="Password"
+                  />
+
+                  <div className="flex gap-4">
+                    <CustomInput
+                      control={form.control}
+                      name="state"
+                      type="text"
+                      placeholder="Ex: Mumbai"
+                      label="State"
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="postalCode"
+                      type="number"
+                      placeholder="Ex: 450331"
+                      label="Postal Code"
+                    />
+                  </div>
+                  <div className="flex gap-6">
+                    <CustomInput
+                      control={form.control}
+                      name="dateOfBirth"
+                      type="date"
+                      placeholder="yyyy-mm-dd"
+                      label="Date Of Birth"
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="ssn"
+                      type="number"
+                      placeholder="ex: 1234"
+                      label="SSN"
+                    />
+                  </div>
+                  <CustomInput
+                    control={form.control}
+                    name="address1"
+                    type="text"
+                    placeholder="Ex: 321,gurunanak word,burhanpur"
+                    label="Address"
+                  />
+                </>
+              )}
+
               <div className="flex flex-col gap-4">
                 <Button className="form-btn" type="submit" disabled={isLoading}>
                   {isLoading ? (
@@ -109,7 +209,7 @@ const AuthForm = ({ type }: { type: string }) => {
             </p>
             <Link
               className="form-link"
-              href={type === "sign-in" ? "/sign-up" : "/sign-up"}
+              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
             >
               {type === "sign-in" ? "Sign Up" : "Sign In"}
             </Link>
