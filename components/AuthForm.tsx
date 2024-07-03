@@ -23,6 +23,7 @@ import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/actions/user.actions";
+import { toast } from "react-toastify";
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
@@ -39,7 +40,6 @@ const AuthForm = ({ type }: { type: string }) => {
       password: "",
     },
   });
-
   // 2. Define a submit handler.
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
@@ -48,22 +48,31 @@ const AuthForm = ({ type }: { type: string }) => {
       if (type === "sign-up") {
         const newUser = await signUp(data);
         setUser(newUser);
+        toast.success("You have successfully signed up for Horizon Bank!");
       }
 
-      // if (type === "sign-in") {
-      //   const response = await signIn({
-      //     email: data.email,
-      //     password: data.password,
-      //   });
-      //   if (response) router.push("/");
-      // }
+      if (type === "sign-in") {
+        const response = await signIn({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (response) {
+          toast.success("You're logged in Successfully!");
+          router.push("/");
+        } else if (!response) {
+          toast.error(
+            " The email or password you entered is incorrect. Please try again."
+          );
+        }
+      }
     } catch (error) {
     } finally {
       setIsLoading(false);
     }
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(data);
+
     setIsLoading(false);
   };
 
@@ -73,7 +82,7 @@ const AuthForm = ({ type }: { type: string }) => {
         <Link href="/" className="cursor-pointer flex items-center gap-1">
           <Image src="/icons/logo.svg" alt="Logo" width={34} height={34} />
           <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">
-            NeoSoft
+            Horizon
           </h1>
         </Link>
         <div className="flex flex-col gap-1 md:gap-3">

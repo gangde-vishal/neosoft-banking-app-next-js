@@ -34,10 +34,13 @@ export const signUp = async (userData: SignUpParams) => {
   }
 };
 
-export const signIn = async () => {
+export const signIn = async ({ email, password }: signInProps) => {
   try {
     // mutation / Database / Make Fetch
-  } catch (error) {
+    const { account } = await createAdminClient();
+    const response = await account.createEmailPasswordSession(email, password);
+    return parseStringify(response);
+  } catch (error) { 
     console.log("error", error);
   }
 };
@@ -53,3 +56,16 @@ export async function getLoggedInUser() {
     return null;
   }
 }
+
+// logout user
+
+export const logoutAccount = async () => {
+  try {
+    const { account } = await createSessionClient();
+    cookies().delete("appwrite-session");
+
+    await account.deleteSession("current");
+  } catch (error) {
+    return null;
+  }
+};

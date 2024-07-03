@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -10,8 +12,8 @@ const ibmPlexSerif = IBM_Plex_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "NeoSoft - Co-operative Bank Ltd",
-  description: "NeoSoft is a modern banking platform for everyone.",
+  title: "Horizon - Co-operative Bank Ltd",
+  description: "Horizon is a modern banking platform for everyone.",
   icons: {
     icon: "/icons/logo.svg",
   },
@@ -26,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${ibmPlexSerif.variable}`}>
         {children}
+        <ToastContainer position="top-right" autoClose={5000} />
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import Footer from "./Footer";
 
 // START WORK FROM HERE SIDEBAR COMPONENT
 const Sidebar = ({ user }: SidebarProps) => {
@@ -20,7 +21,7 @@ const Sidebar = ({ user }: SidebarProps) => {
             alt="Profile Logo"
             className="size-[24px] max-xl:size-14"
           />
-          <h1 className="sidebar-logo">NeoSoft</h1>
+          <h1 className="sidebar-logo">Horizon</h1>
         </Link>
         {sidebarLinks.map((item) => {
           const isActive =
@@ -55,7 +56,7 @@ const Sidebar = ({ user }: SidebarProps) => {
         })}
         USER
       </nav>
-      FOOTER
+      <Footer user={user} type='mobile' />
     </section>
   );
 };
