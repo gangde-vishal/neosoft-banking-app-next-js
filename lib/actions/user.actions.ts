@@ -221,3 +221,8 @@ export const exchangePublicToken = async ({
     console.log("error", error);
   }
 };
+
+// get banks 
+export const getBanks = async() => {
+
+}
