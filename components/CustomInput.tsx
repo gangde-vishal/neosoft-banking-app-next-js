@@ -36,6 +36,7 @@ const CustomInput = ({
                   placeholder={placeholder}
                   className="input-class"
                   {...field}
+                  autoComplete="off"
                 />
               </FormControl>
               <FormMessage className="form-message mt-2" />
